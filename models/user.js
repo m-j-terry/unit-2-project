@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken')
 const userSchema = new mongoose.Schema({
     name: String, 
     email: String, 
-    password: String
+    password: String,
+    books: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }]
 })
 
 userSchema.pre('save', async function(next) {
