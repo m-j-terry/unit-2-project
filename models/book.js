@@ -6,8 +6,9 @@ const bookSchema = new mongoose.Schema({
     title: String, 
     author: String,
     genre: String, 
-    read: Boolean,
-    isbn: Number
+    isbn: Number,
+    condition: String,
+    due: Date
 })
 
 const Book = mongoose.model('Book', bookSchema)
