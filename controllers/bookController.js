@@ -9,14 +9,14 @@ exports.deleteBook = async (req, res) => {
         //setting the user to .splice() the deleted book
         const token = req.header('Authorization').replace('Bearer ', '')
         const data = jwt.verify(token, process.env.JWT_SECRET)
-        const user = await User.findOnw({ _id: data._id })
+        const user = await User.findOne({ _id: data._id })
         if (!user) {
             throw new Error() 
         }
         req.user = user
         //removing 'book' from user.books array
         const bookIndex = user.books.indexOf(book)
-        user.book.splice(bookIndex, 1)
+        user.books.splice(bookIndex, 1)
         await user.save()
         res.json({ message: 'book deleted' })
         //removing 'book' from the database as its own instance

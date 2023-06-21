@@ -13,7 +13,7 @@ const userController = require('../controllers/userController')
 router.delete('/:id', userController.auth, bookController.deleteBook)
 
 // UPDATE
-router.delete('/:id', userController.auth, bookController.updateBook)
+router.put('/:id', userController.auth, bookController.updateBook)
 
 // CREATE
 router.post('/', userController.auth, bookController.createBook)
