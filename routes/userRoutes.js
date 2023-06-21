@@ -9,7 +9,7 @@ const userController = require('../controllers/userController')
 
 
 // DESTROY 
-router.delete(':id', userController.auth, userController.deleteUser)
+router.delete('/:id', userController.auth, userController.deleteUser)
 
 // UPDATE
 router.put('/:id', userController.auth, userController.updateUser)
@@ -24,5 +24,6 @@ router.post('/', userController.createUser)
 
 
 // unRESTful Routes
+router.post('/login', userController.loginUser)
 
 module.exports = router

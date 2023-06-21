@@ -22,6 +22,7 @@ exports.createUser = async (req, res) => {
         const user = new User(req.body)
         await user.save()
         const token = await user.generateAuthToken()
+        console.log( user, token )
         res.json({ user, token })
     } catch(error) {
         console.log(error.message)
@@ -48,7 +49,7 @@ exports.updateUser = async (req, res) => {
     try {
         const updates = Object.keys(req.body)
         const user = await User.findOne({ _id: req.params.id })
-        await user.update() 
+        updates.forEach(update => user[update] = req.body[update])
         await user.save()
         res.json(user)
     } catch(error) {
