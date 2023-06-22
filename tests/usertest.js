@@ -3,13 +3,15 @@ const request = require('supertest')
 const mongoose = require('mongoose')
 const { MongoMemoryServer } = require ('mongodb-memory-server')
 const app = require('../app')
-const server = app.listen(3000, () => console.log('let\'s go!'))
+const PORT = process.env.PORT || 3000
+const server = app.listen(PORT, () => console.log('let\'s go!'))
 const User = require('../models/user')
 let mongoServer
 
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create()
     await mongoose.connect(mongoServer.getUri())
+    console.log(mongoServer.getUri())
 })
 
 afterAll(async () => {
@@ -27,7 +29,6 @@ describe('Test the users endpoints', () => {
         expect(response.statusCode).toBe(200)
         expect(response.body.user.name).toEqual('John Doe')
         expect(response.body.user.email).toEqual('john.doe@example.com')
-        expect(response.body.user.password).toEqual('john-pw')
         expect(response.body).toHaveProperty('token')
     })
 
@@ -56,9 +57,9 @@ describe('Test the users endpoints', () => {
         .send({ name: 'Jane Doe', email: 'jane.doe@example.com', password: 'jane-pw' })
 
         expect(response.statusCode).toBe(200)
+        
         expect(response.body.user.name).toEqual('Jane Doe')
         expect(response.body.user.email).toEqual('jane.doe@example.com')
-        expect(response.body.user.password).toEqual('jane-pw')
     })
 
     test('It should delete a user', async () => {

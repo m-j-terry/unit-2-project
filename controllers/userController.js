@@ -33,7 +33,8 @@ exports.createUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email }) 
-        if (!user || !await bcrypt.compare(req.body.password, user.password)) {
+        const password = await bcrypt.compare(req.body.password, user.password)
+        if (!user || !password) {
             res.status(400).send('Invalid login credentials')
         } else {
             const token = await user.generateAuthToken()
