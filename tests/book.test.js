@@ -115,9 +115,8 @@ describe('Test the users endpoints', () => {
         .send({ name: 'Jane Doe', email: 'jane.doe@example.com', password: 'jane-pw', books: [testBook] })
         
         expect(response.statusCode).toBe(200)
-        // expect(response.body.user.name).toEqual('Jane Doe')
-        // expect(response.body.user.email).toEqual('jane.doe@example.com')
-        expect(response.body.books[1]).toBe(testBook)
+        expect(response.body.user.name).toEqual('Jane Doe')
+        expect(response.body.user.email).toEqual('jane.doe@example.com')
     })
 
     // test('It should delete a user', async () => {
