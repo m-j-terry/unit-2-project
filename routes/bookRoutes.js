@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const bookController = require('../controllers/bookController')
-const userController = require('../controllers/userController')
 
 // INDEX
 
@@ -10,27 +9,18 @@ const userController = require('../controllers/userController')
 
 
 // DESTROY or DISCARD 
-router.delete('/:id', userController.auth, bookController.deleteBook)
+router.delete('/:id', bookController.deleteBook)
 
 // UPDATE
-router.put('/:id', userController.auth, bookController.updateBook)
+router.put('/:id', bookController.updateBook)
 
 // CREATE
-router.post('/', userController.auth, bookController.createBook)
+router.post('/', bookController.createBook)
 
 // EDIT
 
 
 // SHOW
 
-
-
-// unRESTful routes //
-
-// CHECK OUT
-router.put('/:id/checkout', userController.auth, bookController.checkOutBook)
-
-// CHECK IN
-router.put('/:id/checkin', userController.auth, bookController.checkInBook)
 
 module.exports = router

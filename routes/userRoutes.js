@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const bookController = require('../controllers/bookController')
 const userController = require('../controllers/userController')
 
 // INDEX
@@ -25,5 +26,11 @@ router.post('/', userController.createUser)
 
 // unRESTful Routes
 router.post('/login', userController.loginUser)
+
+// CHECK OUT
+router.put('/:id/books/:id/checkout', userController.auth, bookController.checkOutBook)
+
+// CHECK IN
+router.put('/:id/books/:id/checkin', userController.auth, bookController.checkInBook)
 
 module.exports = router
