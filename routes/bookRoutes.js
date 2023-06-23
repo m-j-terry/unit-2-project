@@ -9,7 +9,7 @@ const userController = require('../controllers/userController')
 // NEW
 
 
-// DESTROY 
+// DESTROY or DISCARD 
 router.delete('/:id', userController.auth, bookController.deleteBook)
 
 // UPDATE
@@ -24,5 +24,13 @@ router.post('/', userController.auth, bookController.createBook)
 // SHOW
 
 
+
+// unRESTful routes //
+
+// CHECK OUT
+router.put('/:id/checkout', userController.auth, bookController.checkOutBook)
+
+// CHECK IN
+router.put('/:id/checkin', userController.auth, bookController.checkInBook)
 
 module.exports = router
