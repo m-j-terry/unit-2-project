@@ -28,9 +28,9 @@ router.post('/', userController.createUser)
 router.post('/login', userController.loginUser)
 
 // CHECK OUT
-router.put('/:id/books/:id/checkout', userController.auth, bookController.checkOutBook)
+router.put('/:id/books/:id/checkout', userController.auth, userController.checkOutBook)
 
 // CHECK IN
-router.put('/:id/books/:id/checkin', userController.auth, bookController.checkInBook)
+router.put('/:id/books/:id/checkin', userController.auth, userController.checkInBook)
 
 module.exports = router

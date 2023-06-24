@@ -8,6 +8,7 @@ const bookSchema = new mongoose.Schema({
     genre: String, 
     isbn: Number,
     condition: String,
+    available: Boolean,
     due: Date
 })
 
