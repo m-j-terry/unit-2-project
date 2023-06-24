@@ -26,6 +26,7 @@ router.post('/', userController.createUser)
 
 // unRESTful Routes
 router.post('/login', userController.loginUser)
+router.post('/:id/logout', userController.auth, userController.logoutUser)
 
 // CHECK OUT
 router.put('/:id/books/:id/checkout', userController.auth, userController.checkOutBook)

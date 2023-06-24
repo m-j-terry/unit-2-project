@@ -1,6 +1,14 @@
 const Book = require('../models/book')
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+const Checkout = require('../models/checkout')
+
+exports.showBook = async (req, res) => {
+    try {
+        const book = await Book.findOne({_id: req.params.id})
+        res.json(book)
+    } catch (error) {
+        res.status(400).send({ message: error.message })
+    }
+}
 
 exports.deleteBook = async (req, res) => {
     try {
@@ -27,8 +35,10 @@ exports.updateBook = async (req, res) => {
 exports.createBook = async (req, res) => {
     try {
         const book = new Book(req.body)
-        await book.save()        
-        res.json(book)
+        await book.save()  
+        const checkout = new Checkout({ bookTitle: book, due: null })
+        await checkout.save()
+        res.json(book, checkout)
     } catch(error) {
         res.status(400).json({message: error.message})
     }
