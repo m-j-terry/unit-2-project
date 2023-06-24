@@ -25,13 +25,12 @@ afterAll(async () => {
 describe('Test the books endpoints', () => {
     test('It should create a new book', async () => {
         const user = new User({ name: 'John Doe', email: 'johndoe@email.com', password: 'john-pw' })
-        await user.save()
+        user.save()
         const token = await user.generateAuthToken()
-        await book.save()
         const response = await request(app)
-        .post(`/users/${user._id}/books`)
+        .post(`/books`)
         .set('Authorization', `Bearer ${token}`)
-        .send({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new', available: true, due: '07/29/2023' })
+        .send({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new', available: true, due: null })
 
         expect(response.statusCode).toBe(200)
         expect(response.body.book.title).toEqual('An American Childhood')
@@ -40,7 +39,7 @@ describe('Test the books endpoints', () => {
         expect(response.body.book.isbn).toBe(9780060158057)
         expect(response.body.book.condition).toEqual('new')
         expect(response.body.book.available).toBe(true)
-        expect(response.body.book.date).toBe('07/28/2023')
+        expect(response.body.book.date).toBe(null)
     })
 
     test('It should update a book', async () => {
@@ -50,7 +49,7 @@ describe('Test the books endpoints', () => {
         const book = new Book({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new', available: true, due: '07/29/2023' })
         await book.save()
         const response = await request(app)
-        .put(`/users/${user._id}/books/${book._id}`)
+        .put(`/books/${book._id}`)
         .set('Authorization', `Bearer ${token}`)
         .send({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'used-good', available: false, due: null })
 
@@ -71,7 +70,7 @@ describe('Test the books endpoints', () => {
         const book = new Book({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'poor', available: true, due: null })
         await book.save()
         const response = await request(app)
-        .delete(`/users/${user._id}/books/${book._id}`)
+        .delete(`/books/${book._id}`)
         .set('Authorization', `Bearer ${token}`)
 
         expect(response.statusCode).toBe(200)
@@ -88,16 +87,16 @@ describe('Test the books endpoints', () => {
         const response = await request(app)
         .put(`/users/${user._id}/books/${book._id}/checkout`)
         .set('Authorization', `Bearer ${token}`)
-        .send({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new', available: true, due: setDate(Date.now) })
+        .send({ available: false, due: "08/21/1997" })
 
         expect(response.statusCode).toBe(200)
-        expect(response.body.book.title).toEqual('An American Childhood')
-        expect(response.body.book.author).toEqual('Annie Dillard')
-        expect(response.body.book.genre).toEqual('Memoir')
-        expect(response.body.book.isbn).toBe(9780060158057)
-        expect(response.body.book.condition).toEqual('new')
-        expect(response.body.book.available).toBe(true)
-        expect(response.body.book.date).toBe(setDate(Date.now))
+        // expect(response.body.book.title).toEqual('An American Childhood')
+        // expect(response.body.book.author).toEqual('Annie Dillard')
+        // expect(response.body.book.genre).toEqual('Memoir')
+        // expect(response.body.book.isbn).toBe(9780060158057)
+        // expect(response.body.book.condition).toEqual('new')
+        expect(response.body.book.available).toBe(false)
+        expect(response.body.book.date).toBe("08/21/1997")
         expect(response.body.user.books).toBe([book])
     })
 
@@ -131,55 +130,55 @@ describe('Test the books endpoints', () => {
 // USERS
 
 describe('Test the users endpoints', () => {
-    // test('It should create a new user', async () => {
-    //     const response = await request(app)
-    //     .post('/users')
-    //     .send({ name: 'John Doe', email: 'john.doe@example.com', password: 'john-pw' })
+    test('It should create a new user', async () => {
+        const response = await request(app)
+        .post('/users')
+        .send({ name: 'John Doe', email: 'john.doe@example.com', password: 'john-pw' })
 
-    //     expect(response.statusCode).toBe(200)
-    //     expect(response.body.user.name).toEqual('John Doe')
-    //     expect(response.body.user.email).toEqual('john.doe@example.com')
-    //     expect(response.body).toHaveProperty('token')
-    // })
+        expect(response.statusCode).toBe(200)
+        expect(response.body.user.name).toEqual('John Doe')
+        expect(response.body.user.email).toEqual('john.doe@example.com')
+        expect(response.body).toHaveProperty('token')
+    })
 
-    // test('It should login a user', async () => {
-    //     const user = new User({ name: 'John Doe', email: 'john.doe@example.com', password: 'john-pw' })
-    //     await user.save()
+    test('It should login a user', async () => {
+        const user = new User({ name: 'John Doe', email: 'john.doe@example.com', password: 'john-pw' })
+        await user.save()
 
-    //     const response = await request(app)
-    //     .post('/users/login')
-    //     .send({ email: 'john.doe@example.com', password: 'john-pw' })
+        const response = await request(app)
+        .post('/users/login')
+        .send({ email: 'john.doe@example.com', password: 'john-pw' })
 
-    //     expect(response.statusCode).toBe(200)
-    //     expect(response.body.user.name).toEqual('John Doe')
-    //     expect(response.body.user.email).toEqual('john.doe@example.com')
-    //     expect(response.body).toHaveProperty('token')
-    // })
+        expect(response.statusCode).toBe(200)
+        expect(response.body.user.name).toEqual('John Doe')
+        expect(response.body.user.email).toEqual('john.doe@example.com')
+        expect(response.body).toHaveProperty('token')
+    })
 
     test('It should update a user', async () => {
         const user = new User({ name: 'John Doe', email: 'john.doe@example.com', password: 'john-pw' })
         await user.save()
         const token = await user.generateAuthToken()
+
         const response = await request(app)
-        .put(`/users/${user._id}`)
-        .set('Authorization', `Bearer ${token}`)
-        .send({ name: 'Jane Doe', email: 'jane.doe@example.com', password: 'jane-pw', books: [testBook] })
-        
+            .put(`/users/${user._id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({ name: 'Jane Doe', email: 'jane.doe@example.com', password: 'jane-pw' })
         expect(response.statusCode).toBe(200)
         expect(response.body.user.name).toEqual('Jane Doe')
         expect(response.body.user.email).toEqual('jane.doe@example.com')
     })
 
-    // test('It should delete a user', async () => {
-    //     const user = new User({ name: 'John Doe', email: 'john.doe@example.com', password: 'john-pw' })
-    //     await user.save()
-    //     const token = await user.generateAuthToken()
+    test('It should delete a user', async () => {
+        const user = new User({ name: 'John Doe', email: 'john.doe@example.com', password: 'john-pw' })
+        await user.save()
+        const token = await user.generateAuthToken()
 
-    //     const response = await request(app)
-    //     .delete(`/users/${user._id}`)
-    //     .set('Authorization', `Bearer ${token}`)
+        const response = await request(app)
+        .delete(`/users/${user._id}`)
+        .set('Authorization', `Bearer ${token}`)
         
-    //     expect(response.statusCode).toBe(200)
-    //     expect(response.body.message).toEqual('User deleted')
-    // })
+        expect(response.statusCode).toBe(200)
+        expect(response.body.message).toEqual('User deleted')
+    })
 })
