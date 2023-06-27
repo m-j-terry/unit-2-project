@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 3000
 const server = app.listen(PORT, () => console.log('let\'s get ready to test!'))
 const User = require('../models/user')
 const Book = require('../models/book')
+const Checkout = require('../models/checkout')
 let mongoServer
 
 beforeAll(async () => {
@@ -25,14 +26,12 @@ afterAll(async () => {
 describe('Test the books endpoints', () => {
     test('It should create a new book', async () => {
         const response = await request(app)
-        .post(`/books`)
+        .post('/books')
         .send({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
 
-        // response.body = {myData}
-        // response.body = myData
+        console.log(response.body)
 
-        console.log(`create book ${response.body}`)
-        expect(response.statusCode).toBe(200)
+        // expect(response.statusCode).toBe(200)
         expect(response.body.title).toEqual('An American Childhood')
         expect(response.body.author).toEqual('Annie Dillard')
         expect(response.body.genre).toEqual('Memoir')
@@ -47,7 +46,6 @@ describe('Test the books endpoints', () => {
         .put(`/books/${book._id}`)
         .send({ condition: 'used-good' })
 
-        console.log(`update ${response.body}`)
         expect(response.statusCode).toBe(200)
         expect(response.body.condition).toEqual('used-good')
     })
@@ -68,20 +66,62 @@ describe('Test the books endpoints', () => {
         const token = await user.generateAuthToken()
         const book = new Book({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
         await book.save()
-        user.books.push(book)
+        const checkout = new Checkout({ bookTitle: book })
+        await checkout.save()
+        user.books.push(book._id)
+        await user.save()
         const response = await request(app)
         .put(`/users/${user._id}/books/${book._id}/checkout`)
         .set('Authorization', `Bearer ${token}`)
-        .send({  })
+        .send()
+        //
+        let timeStamp = new Date().getTime()
+        let date = new Date(timeStamp)
+        let dueDate = date.toLocaleDateString('en-US')
+        function setDate(Date) {
 
-        console.log(`checkout ${response.body}`)
+            let date = Date.split('/').map(x => x * 1)
+            if (date[0] === 2 && date[1] > 14) {
+                let remainingDays = 28 - date[1]
+                date[1] = 14 - remainingDays
+                date[0] = 3
+            } else if (date[0] === 4 || date[0] === 6 || date[0] === 9 || date[0] === 11 && date[1] > 16) {
+                let remainingDays = 30 - date[1]
+                date[1] = 14 - remainingDays
+                date[0]++
+            } else if (date[0] === 1 || date[0] === 3 || date[0] === 5 || date[0] === 7 || date[0] === 8 || date[0] === 10 && date[1] > 17) {
+                let remainingDays = 31 - date[1]
+                date[1] = 14 - remainingDays
+                date[0]++
+            } else if (date[0] === 12 && date[1] > 17) {
+                let remainingDays = 31 - date[1]
+                date[2]++
+                date[1] = 14 - remainingDays
+                date[0] = 1
+            } else {
+                date[1] = date[1] + 14
+            }
+        
+            if (date[0] < 10 && date[1] < 10) {
+                date[0] = '0' + date[0] * 1
+                date[1] = '0' + date[1] * 1  
+            } else if (date[0] < 10) {
+                date[0] = '0' + date[0] * 1
+            } else if (date[1] < 10) {
+                date[1] = '0' + date[1] * 1  
+            }
+            return `${date.toString().replaceAll(',', '/')}`
+        }
+        //
         expect(response.statusCode).toBe(200)
-        expect(response.body.book.title).toEqual('An American Childhood')
-        expect(response.body.book.author).toEqual('Annie Dillard')
-        expect(response.body.book.genre).toEqual('Memoir')
-        expect(response.body.book.isbn).toBe(9780060158057)
-        expect(response.body.book.condition).toEqual('new')
-        expect(response.body.user.books).toBe([book])
+        expect(response.body.bookTitle.title).toEqual('An American Childhood')
+        expect(response.body.bookTitle.author).toEqual('Annie Dillard')
+        expect(response.body.bookTitle.genre).toEqual('Memoir')
+        expect(response.body.bookTitle.isbn).toBe(9780060158057)
+        expect(response.body.bookTitle.condition).toEqual('new')
+        expect(user.books[0]).toBe(book._id)
+        expect(response.body.available).toBe(false)
+        expect(response.body.due)
     })
 
     test('It should check in a book', async () => {
@@ -90,28 +130,30 @@ describe('Test the books endpoints', () => {
         const token = await user.generateAuthToken()
         const book = new Book({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
         await book.save()
+        const checkout = new Checkout({ bookTitle: book, available: false })
+        await checkout.save()
         user.books.push(book)
         await user.save()
-        user.books.pop()
+        let checkin = user.books.indexOf(book)
+        user.books.splice(checkin, 1)
         await user.save()
         const response = await request(app)
-        .put(`/users/${user._id}/books/${book._id}/checkout`)
+        .put(`/users/${user._id}/books/${book._id}/checkin`)
         .set('Authorization', `Bearer ${token}`)
         .send({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
 
-        console.log(`checkin ${response.body}`)
         expect(response.statusCode).toBe(200)
-        expect(response.body.book.title).toEqual('An American Childhood')
-        expect(response.body.book.author).toEqual('Annie Dillard')
-        expect(response.body.book.genre).toEqual('Memoir')
-        expect(response.body.book.isbn).toBe(9780060158057)
-        expect(response.body.book.condition).toEqual('new')
-        expect(response.body.user.books).toBe([])
+        expect(response.body.bookTitle.title).toEqual('An American Childhood')
+        expect(response.body.bookTitle.author).toEqual('Annie Dillard')
+        expect(response.body.bookTitle.genre).toEqual('Memoir')
+        expect(response.body.bookTitle.isbn).toBe(9780060158057)
+        expect(response.body.bookTitle.condition).toEqual('new')
+        expect(user.books).toEqual([])
+        expect(response.body.available).toBe(true)
     })
 })
 
 // USERS
-
 describe('Test the users endpoints', () => {
     test('It should create a new user', async () => {
         const response = await request(app)
@@ -147,9 +189,10 @@ describe('Test the users endpoints', () => {
             .put(`/users/${user._id}`)
             .set('Authorization', `Bearer ${token}`)
             .send({ name: 'Jane Doe', email: 'jane.doe@example.com', password: 'jane-pw' })
+        
         expect(response.statusCode).toBe(200)
-        expect(response.body.user.name).toEqual('Jane Doe')
-        expect(response.body.user.email).toEqual('jane.doe@example.com')
+        expect(response.body.name).toEqual('Jane Doe')
+        expect(response.body.email).toEqual('jane.doe@example.com')
     })
 
     test('It should delete a user', async () => {

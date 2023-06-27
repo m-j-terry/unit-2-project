@@ -36,9 +36,10 @@ exports.createBook = async (req, res) => {
     try {
         const book = new Book(req.body)
         await book.save()  
-        const checkout = new Checkout({ bookTitle: book, due: null })
+        const checkout = new Checkout({ bookTitle: book })
         await checkout.save()
-        res.json(book, checkout)
+        console.log(book)
+        res.json(book)
     } catch(error) {
         res.status(400).json({message: error.message})
     }

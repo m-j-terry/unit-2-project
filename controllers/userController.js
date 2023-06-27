@@ -24,10 +24,8 @@ exports.createUser = async (req, res) => {
         const user = new User(req.body)
         await user.save()
         const token = await user.generateAuthToken()
-        console.log( user, token )
         res.json({ user, token })
     } catch(error) {
-        console.log(error.message)
         res.status(400).json({message: error.message})
     }
 }
@@ -84,7 +82,6 @@ exports.checkInBook = async (req, res) => {
         const data = jwt.verify(token, process.env.JWT_SECRET)
         const user = await User.findOne({ _id: Object.values(data)[0] })
         const checkout = await Checkout.findOne({ bookTitle: book })
-        console.log(checkout)
         if (!user) {
             throw new Error() 
         } else if (checkout.available === true) {
