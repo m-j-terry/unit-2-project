@@ -93,8 +93,7 @@ exports.checkInBook = async (req, res) => {
             user.books.splice(bookIndex, 1)
             await user.save()
             await checkout.deleteOne()
-            const checkout1 = new Checkout({ bookTitle: book })
-            await checkout1.save()
+            const checkout1 = await Checkout.create({ bookTitle: book })
             res.json(checkout1)
         }
     } catch (error) {
@@ -111,19 +110,22 @@ exports.checkOutBook = async (req, res) => {
         const checkout = await Checkout.findOne({ bookTitle: req.params.id })
         // console.log(user, book, checkout)
         if (!user) {
+            console.log('user error')
             throw new Error()
         } else if (checkout.available === false) {
+            console.log('checkout.available error')
             res.json({ message: `We're sorry, ${book.name} is unavailable. Please check in again after ${book.due}.`})
         } else {
-            user.books.push(book)
-            await user.save()
+            console.log('gas mf')
             // dueDate variables
             let timeStamp = new Date().getTime()
             let date = new Date(timeStamp)
             let dueDate = date.toLocaleDateString('en-US')
+            user.books.push(book)
+            user.save()
             await checkout.deleteOne()
-            const checkout1 = new Checkout({ bookTitle: book, available: false, due: setDate(dueDate) })
-            await checkout1.save()
+            const checkout1 = await Checkout.create({ bookTitle: book, available: false, due: setDate(dueDate), borrower: user })
+            console.log(checkout1.borrower.books[0])
             res.json(checkout1)
         }
     } catch(error) {

@@ -44,3 +44,26 @@ Summary report @ 00:43:12(+0100) 2023-06-28
     200: 1200
   }
 }
+
+.post: '/books' {
+  All virtual users finished
+Summary report @ 00:57:17(+0100) 2023-06-28
+  Scenarios launched:  1200
+  Scenarios completed: 1200
+  Requests completed:  1200
+  Mean response/sec: 19.84
+  Response time (msec):{
+    min: 252
+    max: 1111
+    median: 267
+    p95: 299.5
+    p99: 341.5
+  }
+  Scenario counts:{
+    0: 1200 (100%)
+  }
+  Codes:{
+    200: 1200
+  }
+}
+

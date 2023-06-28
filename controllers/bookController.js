@@ -34,11 +34,8 @@ exports.updateBook = async (req, res) => {
 
 exports.createBook = async (req, res) => {
     try {
-        const book = new Book(req.body)
-        await book.save()  
-        const checkout = new Checkout({ bookTitle: book })
-        await checkout.save()
-        console.log(book)
+        const book = await Book.create(req.body)
+        const checkout = await Checkout.create({ bookTitle: book })
         res.json(book)
     } catch(error) {
         res.status(400).json({message: error.message})

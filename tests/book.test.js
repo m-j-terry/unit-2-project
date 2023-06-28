@@ -61,65 +61,29 @@ describe('Test the books endpoints', () => {
     })
 
     test('It should check out a book', async () => {
-        const user = new User({ name: 'John Doe', email: 'johndoe@email.com', password: 'john-pw', books: [] })
+        let user = new User({ name: 'John Doe', email: 'johndoe@email.com', password: 'john-pw', books: [] })
         await user.save()
         const token = await user.generateAuthToken()
-        const book = new Book({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
-        await book.save()
-        const checkout = new Checkout({ bookTitle: book })
-        await checkout.save()
-        user.books.push(book._id)
-        await user.save()
+        const book = await Book.create({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
+        const checkout = await Checkout.create({ bookTitle: book, available: true })
+
         const response = await request(app)
         .put(`/users/${user._id}/books/${book._id}/checkout`)
         .set('Authorization', `Bearer ${token}`)
         .send()
-        //
-        let timeStamp = new Date().getTime()
-        let date = new Date(timeStamp)
-        let dueDate = date.toLocaleDateString('en-US')
-        function setDate(Date) {
 
-            let date = Date.split('/').map(x => x * 1)
-            if (date[0] === 2 && date[1] > 14) {
-                let remainingDays = 28 - date[1]
-                date[1] = 14 - remainingDays
-                date[0] = 3
-            } else if (date[0] === 4 || date[0] === 6 || date[0] === 9 || date[0] === 11 && date[1] > 16) {
-                let remainingDays = 30 - date[1]
-                date[1] = 14 - remainingDays
-                date[0]++
-            } else if (date[0] === 1 || date[0] === 3 || date[0] === 5 || date[0] === 7 || date[0] === 8 || date[0] === 10 && date[1] > 17) {
-                let remainingDays = 31 - date[1]
-                date[1] = 14 - remainingDays
-                date[0]++
-            } else if (date[0] === 12 && date[1] > 17) {
-                let remainingDays = 31 - date[1]
-                date[2]++
-                date[1] = 14 - remainingDays
-                date[0] = 1
-            } else {
-                date[1] = date[1] + 14
-            }
-        
-            if (date[0] < 10 && date[1] < 10) {
-                date[0] = '0' + date[0] * 1
-                date[1] = '0' + date[1] * 1  
-            } else if (date[0] < 10) {
-                date[0] = '0' + date[0] * 1
-            } else if (date[1] < 10) {
-                date[1] = '0' + date[1] * 1  
-            }
-            return `${date.toString().replaceAll(',', '/')}`
-        }
-        //
+        user = response.body.borrower
+
+        console.log(response.body.borrower.books[0], user.books[0])
+
         expect(response.statusCode).toBe(200)
         expect(response.body.bookTitle.title).toEqual('An American Childhood')
         expect(response.body.bookTitle.author).toEqual('Annie Dillard')
         expect(response.body.bookTitle.genre).toEqual('Memoir')
         expect(response.body.bookTitle.isbn).toBe(9780060158057)
         expect(response.body.bookTitle.condition).toEqual('new')
-        expect(user.books[0]).toBe(book._id)
+        expect(response.body.borrower).toBe(user)
+        expect(response.body.borrower.books[0]).toEqual(user.books[0])
         expect(response.body.available).toBe(false)
         expect(response.body.due)
     })
@@ -128,19 +92,13 @@ describe('Test the books endpoints', () => {
         const user = new User({ name: 'John Doe', email: 'johndoe@email.com', password: 'john-pw', books: [] })
         await user.save()
         const token = await user.generateAuthToken()
-        const book = new Book({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
-        await book.save()
-        const checkout = new Checkout({ bookTitle: book, available: false })
-        await checkout.save()
-        user.books.push(book)
-        await user.save()
-        let checkin = user.books.indexOf(book)
-        user.books.splice(checkin, 1)
-        await user.save()
+        const book = await Book.create({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
+        const checkout = await Checkout.create({ bookTitle: book, available: false })
+
         const response = await request(app)
         .put(`/users/${user._id}/books/${book._id}/checkin`)
         .set('Authorization', `Bearer ${token}`)
-        .send({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
+        .send()
 
         expect(response.statusCode).toBe(200)
         expect(response.body.bookTitle.title).toEqual('An American Childhood')
