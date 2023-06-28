@@ -147,7 +147,8 @@ describe('Test the users endpoints', () => {
             .put(`/users/${user._id}`)
             .set('Authorization', `Bearer ${token}`)
             .send({ name: 'Jane Doe', email: 'jane.doe@example.com', password: 'jane-pw' })
-        
+            
+        console.log(response)
         expect(response.statusCode).toBe(200)
         expect(response.body.name).toEqual('Jane Doe')
         expect(response.body.email).toEqual('jane.doe@example.com')

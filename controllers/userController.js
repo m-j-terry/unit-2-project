@@ -56,10 +56,11 @@ exports.logoutUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
-        const updates = Object.keys(req.body)
-        const user = await User.findOne({ _id: req.params.id })
-        updates.forEach(update => user[update] = req.body[update])
-        await user.save()
+        // const updates = Object.keys(req.body)
+        // const user = await User.findOne({ _id: req.params.id })
+        // updates.forEach(update => user[update] = req.body[update])
+        // await user.save()
+        const user = await User.findOneAndUpdate({ _id: req.params.id}, req.body, { new: true })
         res.json(user)
     } catch(error) {
         res.status(400).json({message: error.message})

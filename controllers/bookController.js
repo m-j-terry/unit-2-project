@@ -22,10 +22,11 @@ exports.deleteBook = async (req, res) => {
 
 exports.updateBook = async (req, res) => {
     try {
-        const updates = Object.keys(req.body)
-        const book = await Book.findOne({ _id: req.params.id })
-        updates.forEach(update => book[update] = req.body[update])
-        await book.save()
+        // const updates = Object.keys(req.body)
+        // const book = await Book.findOne({ _id: req.params.id })
+        // updates.forEach(update => book[update] = req.body[update])
+        // await book.save()
+        const book = await Book.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
         res.json(book)
     } catch(error) {
         res.status(400).json({ message: error.message })
