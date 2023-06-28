@@ -1,0 +1,46 @@
+.post: '/users' {
+  All virtual users finished
+Summary report @ 00:29:59(+0100) 2023-06-28
+  Scenarios launched:  1200
+  Scenarios completed: 1200
+  Requests completed:  1200
+  Mean response/sec: 19.85
+  Response time (msec): {
+    min: 138
+    max: 826
+    median: 145
+    p95: 161
+    p99: 186.5
+  }
+  Scenario counts: {
+    0: 1200 (100%)
+  }
+  Codes: {
+    200: 1200
+  }
+}
+
+.put: '/users/:id'
+
+
+.post: '/users/login' {
+  All virtual users finished
+Summary report @ 00:43:12(+0100) 2023-06-28
+  Scenarios launched:  1200
+  Scenarios completed: 1200
+  Requests completed:  1200
+  Mean response/sec: 19.85
+  Response time (msec):{
+    min: 134
+    max: 972
+    median: 141
+    p95: 154.5
+    p99: 178.5
+  }
+  Scenario counts:{
+    0: 1200 (100%)
+  }
+  Codes:{
+    200: 1200
+  }
+}

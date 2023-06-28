@@ -1,13 +1,39 @@
 config:
-  target: 'http://localhost:3000'
+  target: 'http://localhost:8000'
   phases:
     - duration: 60
       arrivalRate: 20
 scenarios:
+  # - flow:
+  #     - post:
+  #         url: "/users"
+  #         json:
+  #           name: "Test" 
+  #           email: "test@example.com"
+  #           password: "Password123"  
+
+  # - flow:
+  #     - post:
+  #         url: "/users/login"
+  #         json:
+  #           email: "test@example.com"
+  #           password: "Password123"
+
+  # - flow:
+  #   - put:
+  #       url: "/users/:id"
+  #       body: ""
+  #       json:
+  #         email: "test@example.com"
+  #         password: "Password123"
+
+
   - flow:
-      - post:
-          url: "/users"
-          json:
-            name: "Test"
-            email: "test@example.com"
-            password: "Password123"
+    - post:
+        url: "/books"
+        json: 
+          title: "Pilgrim at Tinker Creek"
+          author: "Annie Dillard"
+          genre: "Philosophy, Nature"
+          isbn: 9780000001234
+          condition: "New"
