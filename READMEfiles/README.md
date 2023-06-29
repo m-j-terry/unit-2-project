@@ -13,7 +13,7 @@
 
 ## Pseudocode
 ### Models
-- This API features two mongoose schemas as the models for database entries: users and books.
+- This API features three mongoose schemas as the models for database entries: users, books, and checkouts.
 #### Users
 - the users schema allows for a user to create an account with the library that records basic user information (name, email, and password), and allows the user to perform basic actions, such as login, update user profile, and check out and check in books.
 - When creating a new user, the user is automatically logged in and can perform these other user actions.
@@ -58,6 +58,14 @@ It will take you to your forked copy of the code (check to see that it says Unit
 - press control + `  (this is the backtick next to the number one, not the apostrophe next to return)
 - This will open up a commandline in VScode, making it easier to manipulate the application and its files. type the following command:
 - npm install
-- this will install all of the dependencies necessary to make the program work. To read more about the dependencies, check out the dependencies section above for more information on each of the dependencies used.
+- This will install all of the dependencies necessary to make the program work. To read more about the dependencies, check out the dependencies section above for more information on each of the dependencies used. VScode will know which dependencies to install because they are recorded in the package.json file.
+
+- Make sure you are in the main unit-2-folder (pwd), then type the following command:
+- touch .env     (this will create a new environment file in the unit-2-project directory. The one I created did not get passed onto you forked repository because it has sensitive information that can't be shared (such as the secret for hashing passwords and the mongoURI))
+- You'll see this file has popped up in the explorer tab on the left. Click on it to open it in the editor. 
+- Write the following three lines in the .env:
+- MONGO_URI=
+- JWT_SECRET=
+- PORT=8000 
 
 ##
