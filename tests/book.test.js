@@ -22,7 +22,6 @@ afterAll(async () => {
 })
 
 // BOOKS
-
 describe('Test the books endpoints', () => {
     test('It should create a new book', async () => {
         const response = await request(app)
