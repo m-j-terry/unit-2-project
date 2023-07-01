@@ -2,7 +2,10 @@
 # Unit 2 Project: Library API
 
 ## Technologies Used
- - Javascript, Node.js
+ - Javascript
+ - Node.js
+ - Postman
+ - MongoDB
 
 ## Dependencies
 - express: configures the router, allowing for specialization in files
@@ -33,9 +36,9 @@
 - The userController creates a RESTful framework for user functionality.
 ### app.js and server.js
 #### app
-
+- app.js sets up the express app, defines userRoutes and bookRoutes, and tells the app whhich dependencies it is required to run
 #### server
-
+- server.js connects to mongoose and makes sure the computer is listening on the PORT.
 ## Wireframe
 ![Image shows an early sketch of how the API would function](Figure_1.png)
 - Above is the wireframe I made to map out the functionality of my API.
@@ -44,8 +47,9 @@
 
 - [Here](https://trello.com/b/ycKT7465/library-api) is a link to the Trello I made for the API.
 
-## How to use this application on your local machine
-### Fork this git repository onto your machine
+![](books.jpeg)
+# How to use this application on your local machine
+## Fork this git repository onto your machine
 - Towards the upper right of this page, you should see three buttons: "watch", "fork", and "star". Feel free to watch and star my work, but for now all you will need to do  is click the fork button to create a clone of all my project's folders and files into a git repository on your github account. 
 - The next page will give you the option to change the repository name and add a description if you would like; I recommend leaving those as is and clickign the green 'create' fork button.
 It will take you to your forked copy of the code (check to see that it says Unit-2-Project forked from m-j-terry/Unit-2-Project). Click the green < code > button toward the upper right of the screen. Copy the link to your clipboard. 
@@ -59,7 +63,7 @@ It will take you to your forked copy of the code (check to see that it says Unit
     6. cd unit-2-project
     7. code .  (this will open the directory and its subdirectories/files in VisualStudio Code)
 
-### Install dependencies
+## Install dependencies
 - Next, you need to install the necessary dependencies to make the application run. 
 - press control + `  (this is the backtick next to the number one, not the apostrophe next to return)
 - This will open up a commandline in VScode, making it easier to manipulate the application and its files. type the following command:
