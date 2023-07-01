@@ -20,9 +20,6 @@ Summary report @ 00:29:59(+0100) 2023-06-28
   }
 }
 
-.put: '/users/:id'
-
-
 .post: '/users/login' {
   All virtual users finished
 Summary report @ 00:43:12(+0100) 2023-06-28
@@ -66,4 +63,3 @@ Summary report @ 00:57:17(+0100) 2023-06-28
     200: 1200
   }
 }
-
