@@ -85,6 +85,14 @@ It will take you to your forked copy of the code (check to see that it says Unit
 - For the JWT_SECRET
     - You'll need to come up with a secret for hashing your saved passwords. Save your JWT_SECRET as a string.
 
+## Testing
+- Before you start trying to send requests to the server, the API has built in testing through jest and supertest. 
+- Run the following command in your commandline: npm i jest supertest mongodb-memory-server
+- Check the package.json to be sure that these installed as devdependencies; if not, you can create a key for devDependencies whose value is an object containing the three packages we just installed. 
+- Run the following command in your commandline: npm run test
+- You should get back the message that 1 test suite passed with 11 tests in it. If this is not the case, you might need to check the dependencies, the process.env, the PORT, or carefully review the error messages to see what is stopping the tests from running properly.
+- Once the tests are running smoothly, you can move onto the next section.
+
 ## Postman
 - Next, you should be ready to start adding users and library books to the API!
 - In your terminal, run the command: npm run dev
