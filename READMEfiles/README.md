@@ -1,15 +1,16 @@
+![](books.jpeg)
 # Unit 2 Project: Library API
 
 ## Technologies Used
  - Javascript, Node.js
 
 ## Dependencies
-- express: 
-- mongoose: 
-- morgan: 
-- bcrypt: 
-- dotenv: 
-- jsonwebtoken: 
+- express: configures the router, allowing for specialization in files
+- mongoose: uses Schemas when sending documents to mongoDB, which effectively allows developers to create classes and use OOP principles in back end code
+- morgan: allows us to see (and minimize) latency
+- bcrypt: Used for web authentication. Encrypts dataWorks with SHA256
+- dotenv: zero-dependency modules that loads environment variables from a secure ".env" file
+- jsonwebtoken: implements jwt tokens for user authentication in API
 
 ## Pseudocode
 ### Models
@@ -27,9 +28,9 @@
 - The routes connect the built in express.Router() to the controllers.
 ### Controllers
 #### bookController
-- The bookController handles the main functionality of the app, performing the functions corresponding to the router at the designated URL route. 
+- The bookController allows for CRUD functionality on documents corresponding to the '/books' route. 
 #### userController
-
+- The userController creates a RESTful framework for user functionality.
 ### app.js and server.js
 #### app
 
