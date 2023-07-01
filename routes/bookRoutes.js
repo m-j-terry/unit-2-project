@@ -3,7 +3,7 @@ const router = express.Router()
 const bookController = require('../controllers/bookController')
 
 // INDEX
-
+router.get('/', bookController.indexBooks)
 
 // NEW
 

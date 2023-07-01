@@ -22,7 +22,7 @@ router.post('/', userController.createUser)
 
 
 // SHOW
-
+router.get('/:id', userController.auth, userController.showUser)
 
 // unRESTful Routes
 router.post('/login', userController.loginUser)

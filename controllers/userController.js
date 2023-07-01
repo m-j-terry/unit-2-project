@@ -30,6 +30,15 @@ exports.createUser = async (req, res) => {
     }
 }
 
+exports.showUser = async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.params.id})
+        res.json(user)
+    } catch (error) {
+        res.status(400).send({ message: error.message })
+    }
+}
+
 exports.loginUser = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email }) 
@@ -109,7 +118,6 @@ exports.checkOutBook = async (req, res) => {
         const data = jwt.verify(token, process.env.JWT_SECRET)
         const user = await User.findOne({ _id: Object.values(data)[0] })
         const checkout = await Checkout.findOne({ bookTitle: req.params.id })
-        // console.log(user, book, checkout)
         if (!user) {
             console.log('user error')
             throw new Error()
@@ -117,7 +125,6 @@ exports.checkOutBook = async (req, res) => {
             console.log('checkout.available error')
             res.json({ message: `We're sorry, ${book.name} is unavailable. Please check in again after ${book.due}.`})
         } else {
-            console.log('gas mf')
             // dueDate variables
             let timeStamp = new Date().getTime()
             let date = new Date(timeStamp)
@@ -125,8 +132,7 @@ exports.checkOutBook = async (req, res) => {
             user.books.push(book)
             user.save()
             await checkout.deleteOne()
-            const checkout1 = await Checkout.create({ bookTitle: book, available: false, due: setDate(dueDate), borrower: user })
-            console.log(checkout1.borrower.books[0])
+            const checkout1 = await Checkout.create({ available: false, due: setDate(dueDate), bookTitle: book, borrower: user })
             res.json(checkout1)
         }
     } catch(error) {
@@ -134,7 +140,6 @@ exports.checkOutBook = async (req, res) => {
     }
 }
 
-// dueDate function
 function setDate(Date) {
 
     let date = Date.split('/').map(x => x * 1)
@@ -142,11 +147,11 @@ function setDate(Date) {
         let remainingDays = 28 - date[1]
         date[1] = 14 - remainingDays
         date[0] = 3
-    } else if (date[0] === 4 || date[0] === 6 || date[0] === 9 || date[0] === 11 && date[1] > 16) {
+    } else if (date[0] === 4 && date[1] > 16 || date[0] === 6 && date[1] > 16 || date[0] === 9 && date[1] > 16 || date[0] === 11 && date[1] > 16) {
         let remainingDays = 30 - date[1]
         date[1] = 14 - remainingDays
         date[0]++
-    } else if (date[0] === 1 || date[0] === 3 || date[0] === 5 || date[0] === 7 || date[0] === 8 || date[0] === 10 && date[1] > 17) {
+    } else if (date[0] === 1 && date[1] > 17 || date[0] === 3 && date[1] > 17 || date[0] === 5 && date[1] > 17 || date[0] === 7 && date[1] > 17 || date[0] === 8 && date[1] > 17 || date[0] === 10 && date[1] > 17) {
         let remainingDays = 31 - date[1]
         date[1] = 14 - remainingDays
         date[0]++
@@ -167,7 +172,7 @@ function setDate(Date) {
     } else if (date[1] < 10) {
         date[1] = '0' + date[1] * 1  
     }
-    return `${date.toString().replaceAll(',', '/')}`
+    return date.toString().replaceAll(',', '/')
 }
 
 function indexBooks() {

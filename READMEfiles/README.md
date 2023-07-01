@@ -15,14 +15,19 @@
 ### Models
 - This API features three mongoose schemas as the models for database entries: users, books, and checkouts.
 #### Users
-- the users schema allows for a user to create an account with the library that records basic user information (name, email, and password), and allows the user to perform basic actions, such as login, update user profile, and check out and check in books.
+- The users schema allows for a user to create an account with the library that records basic user information (name, email, and password), and allows the user to perform basic actions, such as login, update user profile, and check out and check in books.
 - When creating a new user, the user is automatically logged in and can perform these other user actions.
 #### Books
+- The books schema allows for the (in this instance, the user, but librarian authentication could easily be employed) user to add books to the library's online database. 
 #### Checkout
+- The checkout schema allows for flexibility in creating receipts for when checked out books will be due and whether or not books are available to be checked out by storing a reference to the corresponding book _id. 
 
+### Routers
+#### userRoutes and bookRoutes
+- The routes connect the built in express.Router() to the controllers.
 ### Controllers
 #### bookController
-
+- The bookController handles the main functionality of the app, performing the functions corresponding to the router at the designated URL route. 
 #### userController
 
 ### app.js and server.js

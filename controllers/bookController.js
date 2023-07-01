@@ -1,6 +1,16 @@
 const Book = require('../models/book')
 const Checkout = require('../models/checkout')
 
+exports.indexBooks = async (req, res) => {
+    try {
+        const foundBooks = await Book.find({})
+        console.log(foundBooks)
+        res.json(foundBooks)
+    } catch (error) {
+        res.status(400).send({ message: error.message })
+    }
+}
+
 exports.showBook = async (req, res) => {
     try {
         const book = await Book.findOne({_id: req.params.id})
