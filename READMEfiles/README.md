@@ -1,13 +1,14 @@
 ![](books.jpeg)
 # Unit 2 Project: Library API
-
-## Technologies Used
+## By Michael Terry
+ 
+### Technologies Used
  - Javascript
  - Node.js
  - Postman
  - MongoDB
 
-## Dependencies
+### Dependencies
 - express: configures the router, allowing for specialization in files
 - mongoose: uses Schemas when sending documents to mongoDB, which effectively allows developers to create classes and use OOP principles in back end code
 - morgan: allows us to see (and minimize) latency
@@ -15,37 +16,37 @@
 - dotenv: zero-dependency modules that loads environment variables from a secure ".env" file
 - jsonwebtoken: implements jwt tokens for user authentication in API
 
-## Pseudocode
-### Models
+### Pseudocode
+#### Models
 - This API features three mongoose schemas as the models for database entries: users, books, and checkouts.
-#### Users
+##### Users
 - The users schema allows for a user to create an account with the library that records basic user information (name, email, and password), and allows the user to perform basic actions, such as login, update user profile, and check out and check in books.
 - When creating a new user, the user is automatically logged in and can perform these other user actions.
-#### Books
+##### Books
 - The books schema allows for the (in this instance, the user, but librarian authentication could easily be employed) user to add books to the library's online database. 
-#### Checkout
+##### Checkout
 - The checkout schema allows for flexibility in creating receipts for when checked out books will be due and whether or not books are available to be checked out by storing a reference to the corresponding book _id. 
 
-### Routers
-#### userRoutes and bookRoutes
+#### Routers
+##### userRoutes and bookRoutes
 - The routes connect the built in express.Router() to the controllers.
-### Controllers
-#### bookController
+#### Controllers
+##### bookController
 - The bookController allows for CRUD functionality on documents corresponding to the '/books' route. 
-#### userController
+##### userController
 - The userController creates a RESTful framework for user functionality.
-### app.js and server.js
-#### app
+#### app.js and server.js
+##### app
 - app.js sets up the express app, defines userRoutes and bookRoutes, and tells the app whhich dependencies it is required to run
-#### server
+##### server
 - server.js connects to mongoose and makes sure the computer is listening on the PORT.
-## Wireframe
+### Wireframe
 ![Image shows an early sketch of how the API would function](Figure_1.png)
 - Above is the wireframe I made to map out the functionality of my API.
 
 ![Image shows the web of connected documents created by the API](Figure_2.jpg)
 
-- [Here](https://trello.com/b/ycKT7465/library-api) is a link to the Trello I made for the API.
+- [Here](https://trello.com/b/ycKT7465/library-api) is the link to the Trello I made for the API.
 
 
 ## 
