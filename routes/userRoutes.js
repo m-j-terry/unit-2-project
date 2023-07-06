@@ -25,13 +25,13 @@ router.post('/', userController.createUser)
 router.get('/:id', userController.auth, userController.showUser)
 
 // unRESTful Routes
+// LOGIN
 router.post('/login', userController.loginUser)
-// router.post('/:id/logout', userController.auth, userController.logoutUser)
-
 // CHECK OUT
 router.put('/:id/books/:id/checkout', userController.auth, userController.checkOutBook)
-
 // CHECK IN
 router.put('/:id/books/:id/checkin', userController.auth, userController.checkInBook)
+// SHOW BORROWED BOOKS
+router.get('/:id/borrowedbooks', userController.auth, userController.indexBorrowedBooks)
 
 module.exports = router

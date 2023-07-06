@@ -30,11 +30,22 @@ describe('Test the books endpoints', () => {
         await book2.save()
         const response = await request(app).get('/books')
 
-        console.log(book1)
-        console.log(response.body[0])
         expect(response.statusCode).toBe(200)
         expect(response.body[0].title).toBe(book1.title)
         expect(response.body[1].title).toBe(book2.title)
+    })
+
+    test('It should show a book', async () => {
+        const book = new Book({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
+        await book.save()
+        const checkout = await Checkout.create({ bookRef: book, available: true })
+
+        const response = await request(app).get(`/books/${book._id}`)
+        
+        expect(response.statusCode).toBe(200)    
+        expect(response.body.title).toEqual('An American Childhood')
+        expect(response.body.author).toEqual('Annie Dillard')
+        expect(response.body.available).toEqual(true)
     })
 
     test('It should create a new book', async () => {
@@ -76,7 +87,7 @@ describe('Test the books endpoints', () => {
         await user.save()
         const token = await user.generateAuthToken()
         const book = await Book.create({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
-        const checkout = await Checkout.create({ bookTitle: book, available: true })
+        const checkout = await Checkout.create({ bookRef: book, available: true })
 
         const response = await request(app)
         .put(`/users/${user._id}/books/${book._id}/checkout`)
@@ -86,11 +97,11 @@ describe('Test the books endpoints', () => {
         user = response.body.borrower
 
         expect(response.statusCode).toBe(200)
-        expect(response.body.bookTitle.title).toEqual('An American Childhood')
-        expect(response.body.bookTitle.author).toEqual('Annie Dillard')
-        expect(response.body.bookTitle.genre).toEqual('Memoir')
-        expect(response.body.bookTitle.isbn).toBe(9780060158057)
-        expect(response.body.bookTitle.condition).toEqual('new')
+        expect(response.body.bookRef.title).toEqual('An American Childhood')
+        expect(response.body.bookRef.author).toEqual('Annie Dillard')
+        expect(response.body.bookRef.genre).toEqual('Memoir')
+        expect(response.body.bookRef.isbn).toBe(9780060158057)
+        expect(response.body.bookRef.condition).toEqual('new')
         expect(response.body.borrower).toBe(user)
         expect(response.body.borrower.books[0]).toEqual(user.books[0])
         expect(response.body.available).toBe(false)
@@ -102,7 +113,7 @@ describe('Test the books endpoints', () => {
         await user.save()
         const token = await user.generateAuthToken()
         const book = await Book.create({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
-        const checkout = await Checkout.create({ bookTitle: book, available: false })
+        const checkout = await Checkout.create({ bookRef: book, available: false })
 
         const response = await request(app)
         .put(`/users/${user._id}/books/${book._id}/checkin`)
@@ -110,11 +121,11 @@ describe('Test the books endpoints', () => {
         .send()
 
         expect(response.statusCode).toBe(200)
-        expect(response.body.bookTitle.title).toEqual('An American Childhood')
-        expect(response.body.bookTitle.author).toEqual('Annie Dillard')
-        expect(response.body.bookTitle.genre).toEqual('Memoir')
-        expect(response.body.bookTitle.isbn).toBe(9780060158057)
-        expect(response.body.bookTitle.condition).toEqual('new')
+        expect(response.body.bookRef.title).toEqual('An American Childhood')
+        expect(response.body.bookRef.author).toEqual('Annie Dillard')
+        expect(response.body.bookRef.genre).toEqual('Memoir')
+        expect(response.body.bookRef.isbn).toBe(9780060158057)
+        expect(response.body.bookRef.condition).toEqual('new')
         expect(user.books).toEqual([])
         expect(response.body.available).toBe(true)
     })
@@ -184,5 +195,23 @@ describe('Test the users endpoints', () => {
         
         expect(response.statusCode).toBe(200)
         expect(response.body.message).toEqual('User deleted')
+    })
+
+    test('It should show all of a user\'s borrowed books', async () => {
+        const user = new User({ name: 'test three', email: 'test.three@example.com', password: 'test3-pw' })
+        await user.save()
+        const token = await user.generateAuthToken()
+        const book = new Book({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
+        await book.save()
+        const checkout = await Checkout.create({ bookRef: book, available: true })
+        user.books.push(book)
+        await user.save()
+
+        const response = await request(app)
+        .get(`/users/${user.id}/borrowedBooks`)
+        .set('Authorization', `Bearer ${token}`)
+        .send()
+
+        expect(response.body.borrowedBooks[0]).toBe(book.id)
     })
 })

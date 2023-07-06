@@ -55,14 +55,6 @@ exports.loginUser = async (req, res) => {
     }
 }
 
-exports.logoutUser = async (req, res) => {
-    try {
-        const user = await User.findOne({ _id: req.params.id })
-    } catch(error) {
-        res.status(400).json({ message: error.message })
-    }
-}
-
 exports.updateUser = async (req, res) => {
     try {
         // const updates = Object.keys(req.body)
@@ -91,7 +83,7 @@ exports.checkInBook = async (req, res) => {
         const token = req.header('Authorization').replace('Bearer ', '')
         const data = jwt.verify(token, process.env.JWT_SECRET)
         const user = await User.findOne({ _id: Object.values(data)[0] })
-        const checkout = await Checkout.findOne({ bookTitle: book })
+        const checkout = await Checkout.findOne({ bookRef: book })
         if (!user) {
             throw new Error() 
         } else if (checkout.available === true) {
@@ -103,12 +95,17 @@ exports.checkInBook = async (req, res) => {
             user.books.splice(bookIndex, 1)
             await user.save()
             await checkout.deleteOne()
-            const checkout1 = await Checkout.create({ bookTitle: book })
+            const checkout1 = await Checkout.create({ bookRef: book })
             res.json(checkout1)
         }
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
+}
+
+exports.indexBorrowedBooks = async (req, res) => {
+    const user = await User.findOne({ _id: req.params.id})
+    res.json({ borrowedBooks: user.books })
 }
 
 exports.checkOutBook = async (req, res) => {
@@ -117,7 +114,7 @@ exports.checkOutBook = async (req, res) => {
         const token = req.header('Authorization').replace('Bearer ', '')
         const data = jwt.verify(token, process.env.JWT_SECRET)
         const user = await User.findOne({ _id: Object.values(data)[0] })
-        const checkout = await Checkout.findOne({ bookTitle: req.params.id })
+        const checkout = await Checkout.findOne({ bookRef: req.params.id })
         if (!user) {
             console.log('user error')
             throw new Error()
@@ -132,7 +129,7 @@ exports.checkOutBook = async (req, res) => {
             user.books.push(book)
             user.save()
             await checkout.deleteOne()
-            const checkout1 = await Checkout.create({ available: false, due: setDate(dueDate), bookTitle: book, borrower: user })
+            const checkout1 = await Checkout.create({ available: false, due: setDate(dueDate), bookRef: book, borrower: user })
             res.json(checkout1)
         }
     } catch(error) {

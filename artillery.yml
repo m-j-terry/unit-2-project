@@ -19,18 +19,6 @@ scenarios:
   #           email: "test@example.com"
   #           password: "Password123"
 
-  - flow:
-    - put:
-        url: "/users/649b70bb17a8c14cee1fc823"
-        header: { Authorization:  } 
-        json:
-          email: "test@example.com"
-          password: "Password123"
-
-  # - flow: 
-  #   - delete: 
-  #     url: "/users/12345"
-
   # - flow:
   #   - post:
   #       url: "/books"

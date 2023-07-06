@@ -70,12 +70,11 @@ It will take you to your forked copy of the code (check to see that it says Unit
 ## Install dependencies
 - Next, you need to install the necessary dependencies to make the application run. 
 - press control + `  (this is the backtick next to the number one, not the apostrophe next to return)
-- This will open up a commandline in VScode, making it easier to manipulate the application and its files. type the following command:
-- npm install
+- This will open up a commandline in VScode, making it easier to manipulate the application and its files. type the following command: npm install
 - This will install all of the dependencies necessary to make the program work. To read more about the dependencies, check out the dependencies section above for more information on each of the dependencies used. VScode will know which dependencies to install because they are recorded in the package.json file.
 
-- Make sure you are in the main unit-2-folder (pwd), then type the following command:
-- touch .env     (this will create a new environment file in the unit-2-project directory. The one I created did not get passed onto you forked repository because it has sensitive information that can't be shared (such as the secret for hashing passwords and the mongoURI))
+- Make sure you are in the main unit-2-folder (pwd), then type the following command: touch .env     
+- This will create a new environment file in the unit-2-project directory. The one I created did not get passed onto you forked repository because it has sensitive information that can't be shared (such as the secret for hashing passwords and the mongoURI).
 - You'll see this file has popped up in the explorer tab on the left. Click on it to open it in the editor. 
 - Write the following three lines in the .env:
     - MONGO_URI=
@@ -88,22 +87,25 @@ It will take you to your forked copy of the code (check to see that it says Unit
 
 ## Testing
 - Before you start trying to send requests to the server, the API has built in testing through jest and supertest. 
-- Run the following command in your commandline: npm i jest supertest mongodb-memory-server
+- First, check your package.json to see if jest, supertest, and mongodb-memory-server are installed and listed under devDependencies (it might have been installed under the regular dependencies, so check there too!)
+- If they were not installed by our 'npm install' command, run the following command in your commandline: npm i jest supertest mongodb-memory-server
 - Check the package.json to be sure that these installed as devdependencies; if not, you can create a key for devDependencies whose value is an object containing the three packages we just installed. 
 - Run the following command in your commandline: npm run test
-- You should get back the message that 1 test suite passed with 11 tests in it. If this is not the case, you might need to check the dependencies, the process.env, the PORT, or carefully review the error messages to see what is stopping the tests from running properly.
+- You should get back the message that 1 test suite passed with 13 tests. If this is not the case, you might need to check the dependencies, the process.env, the PORT, or carefully review the error messages to see what is stopping the tests from running properly.
+- For latency or load testing, you should switch over to the arillery.yml file; I've left three of the tests there, which you can try one at a time by simply uncommenting them out individually for each test. Run the command: npm run load
+- This will send twenty responses a second for one minute. Refer to the artillery-reports file for comparison to see if the API is running smoothly on your machine.  
 - Once the tests are running smoothly, you can move onto the next section.
 
 ## Postman
 - Next, you should be ready to start adding users and library books to the API!
-- In your terminal, run the command: npm run dev
+- In your terminal, run the command: npm run start (note: npm run start is different than run test or run dev because it does not allow you to access the devDependencies, which is how the API will be accessed by clients)
 - You should get two messages in your console that will let you know you're ready to start posting:
     1. "We in the building at 8000", which signals that this application is listening on PORT 8000 (as defined in our .env)
     2. "Mongo showing love", which signals that the mongoose has successfully connected to the database specified by the MONGO_URI.
 - Go to postman and send some post requests to '/books' to add a few of your favorite books to the library's collection. Be sure to include everything specified by the schema in the book model. Title, Author, Genre, and Condition are all string fields and are required. ISBN is a number but is not required.
 - Once you've added these, you may create yourself a library user account by makign a post request to '/users'. There are three elements and all are required: name ('string'), email ('string'), and password ('string'). once you've made an account, you can login the newly generated user by  sending the email and password to '/users/login.
 - Once logged in, be sure to copy down the user token and user._id in the notes app. After setting the 'Authorization Bearer Token' to th users jwt token, it is time to start checking out some books! Make a put request to '/users/:id/books/:id/checkout", where the first :id is the user id and the second is the book id.
-- this will return a new checkout document that will have the following information autofilled in: due date (two weeks in advance), available (not for other users), and borrower (your user).
-- to check the book back in, just change the put request to '/users/:id/books/:id/checkin'.
+- This will return a new checkout document that will have the following information autofilled in: due date (two weeks in advance), available (not for other users), and borrower (your user).
+- To check the book back in, just change the put request to '/users/:id/books/:id/checkin'.
 - Lastly, to update the details of the book, such as condition, simply make a put request to '/books/:id', including the key-values you'd like to change in the json.
 - To close the application, simply press 'ctrl + c' twice.
