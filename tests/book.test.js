@@ -53,7 +53,7 @@ describe('Test the books endpoints', () => {
         .post('/books')
         .send({ title: 'An American Childhood', author: 'Annie Dillard', genre: 'Memoir', isbn: 9780060158057, condition: 'new' })
 
-        // expect(response.statusCode).toBe(200)
+        expect(response.statusCode).toBe(200)
         expect(response.body.title).toEqual('An American Childhood')
         expect(response.body.author).toEqual('Annie Dillard')
         expect(response.body.genre).toEqual('Memoir')
@@ -212,6 +212,7 @@ describe('Test the users endpoints', () => {
         .set('Authorization', `Bearer ${token}`)
         .send()
 
+        expect(response.statusCode).toBe(200)
         expect(response.body.borrowedBooks[0]).toBe(book.id)
     })
 })

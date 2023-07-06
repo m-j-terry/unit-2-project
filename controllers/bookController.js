@@ -1,5 +1,6 @@
 const Book = require('../models/book')
 const Checkout = require('../models/checkout')
+const User = require('../models/user')
 
 exports.indexBooks = async (req, res) => {
     try {
@@ -13,15 +14,8 @@ exports.indexBooks = async (req, res) => {
 exports.showBook = async (req, res) => {
     try {
         const book = await Book.findOne({ _id: req.params.id})
-        // const foundBooks = await Book.find({})
-        console.log(`This is book ${book}`)
-        // console.log(foundBooks)
-        // const findBook = foundBooks.indexOf(book)
-        // const findBook = foundBooks.findIndex(item => item.isbn === book.isbn)
-        // const foundBook = foundBooks[findBook]
         const checkout = await Checkout.findOne({ bookRef: book })
-        console.log(checkout)
-        res.json({ title: book.title, author: book.author, available: checkout.available})
+        res.json({ title: book.title, author: book.author, available: checkout.available })
     } catch (error) {
         res.status(400).send({ message: error.message })
     }

@@ -104,8 +104,12 @@ exports.checkInBook = async (req, res) => {
 }
 
 exports.indexBorrowedBooks = async (req, res) => {
-    const user = await User.findOne({ _id: req.params.id})
-    res.json({ borrowedBooks: user.books })
+    try { 
+        const user = await User.findOne({ _id: req.params.id })
+        res.json({ borrowedBooks: user.books })
+    } catch(error) {
+        res.status(400).send({ message: error.message })
+    }
 }
 
 exports.checkOutBook = async (req, res) => {
