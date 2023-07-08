@@ -53,7 +53,7 @@
 
 ![](books.jpeg)
 # How to use this application on your local machine
-## Fork this git repository onto your machine
+## Clone this git repository onto your machine
 - Towards the upper right of this page, you should see a green '<> Code' button; click this and copy the https link to create a clone of all my project's folders and files into a git repository on your github account.
 - Next, open up your command line: on Mac press "shift" + "space bar" to open the spotlight search, type "terminal", press enter. 
 - Now, enter the following commands:
@@ -71,7 +71,7 @@
 - This will open up a commandline in VScode, making it easier to manipulate the application and its files. type the following command: npm install
 - This will install all of the dependencies necessary to make the program work. To read more about the dependencies, check out the dependencies section above for more information on each of the dependencies used. VScode will know which dependencies to install because they are recorded in the package.json file.
 - Make sure you are in the main unit-2-folder (pwd), then type the following command: touch .env     
-- This will create a new environment file in the unit-2-project directory. The one I created did not get passed onto you forked repository because it has sensitive information that can't be shared (such as the secret for hashing passwords and the mongoURI).
+- This will create a new environment file in the unit-2-project directory. The one I created did not get passed onto you cloned repository because it has sensitive information that can't be shared (such as the secret for hashing passwords and the mongoURI).
 - You'll see this file has popped up in the explorer tab on the left. Click on it to open it in the editor. 
 - Write the following three lines in the .env:
     - MONGO_URI=
@@ -103,7 +103,7 @@
 - Go to postman and send some post requests to '/books' to add a few of your favorite books to the library's collection. Be sure to include everything specified by the schema in the book model. Title, Author, Genre, and Condition are all string fields and are required. ISBN is a number but is not required.
 - Once you've added these, you may create yourself a library user account by making a post request to '/users'. There are three elements and all are required: name ('string'), email ('string'), and password ('string'). once you've made an account, you can login the newly generated user by  sending the email and password to '/users/login'.
 - Once logged in, be sure to copy down the user token and user._id in the notes app. After setting the 'Authorization Bearer Token' to the users jwt token, it is time to start checking out some books! Make a put request to '/users/:id/books/:id/checkout", where the first :id is the user id and the second is the book id.
-- This will return a new checkout document that will have the following information autofilled in: due date (two weeks in advance), available (not for other users), and borrower (your user).
+- This will return a new checkout document that will have the following information autofilled in: due date (two weeks in advance), available (not for other users!), and borrower (your user).
 - To check the book back in, just change the put request to '/users/:id/books/:id/checkin'.
 - Lastly, to update the details of the book, such as condition, simply make a put request to '/books/:id', including the key-values you'd like to change in the json.
 - To close the application, simply press 'ctrl + c' twice.
