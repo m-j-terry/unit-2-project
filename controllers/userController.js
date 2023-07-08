@@ -144,22 +144,22 @@ exports.checkOutBook = async (req, res) => {
 function setDate(Date) {
 
     let date = Date.split('/').map(x => x * 1)
-    if (date[0] === 2 && date[1] > 13) {
+    if (date[0] === 2 && date[1] > 14) {
         let remainingDays = 28 - date[1]
-        date[1] = 15 - remainingDays
+        date[1] = 14 - remainingDays
         date[0] = 3
-    } else if (date[0] === 4 && date[1] > 15 || date[0] === 6 && date[1] > 15 || date[0] === 9 && date[1] > 15 || date[0] === 11 && date[1] > 15) {
+    } else if (date[0] === 4 && date[1] > 16 || date[0] === 6 && date[1] > 16 || date[0] === 9 && date[1] > 16 || date[0] === 11 && date[1] > 16) {
         let remainingDays = 30 - date[1]
-        date[1] = 15 - remainingDays
+        date[1] = 14 - remainingDays
         date[0]++
-    } else if (date[0] === 1 && date[1] > 16 || date[0] === 3 && date[1] > 16 || date[0] === 5 && date[1] > 16 || date[0] === 7 && date[1] > 16 || date[0] === 8 && date[1] > 16 || date[0] === 10 && date[1] > 16) {
+    } else if (date[0] === 1 && date[1] > 17 || date[0] === 3 && date[1] > 17 || date[0] === 5 && date[1] > 17 || date[0] === 7 && date[1] > 17 || date[0] === 8 && date[1] > 17 || date[0] === 10 && date[1] > 17) {
         let remainingDays = 31 - date[1]
-        date[1] = 15 - remainingDays
+        date[1] = 14 - remainingDays
         date[0]++
-    } else if (date[0] === 12 && date[1] > 16) {
+    } else if (date[0] === 12 && date[1] > 17) {
         let remainingDays = 31 - date[1]
         date[2]++
-        date[1] = 15 - remainingDays
+        date[1] = 14 - remainingDays
         date[0] = 1
     } else {
         date[1] = date[1] + 14
