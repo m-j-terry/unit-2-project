@@ -1,4 +1,4 @@
-![](books.jpeg)
+![](/READMEfiles/books.jpeg)
 # Unit 2 Project: Library API
 ## By Michael Terry
  
@@ -41,17 +41,17 @@
 ##### server
 - server.js connects to mongoose and makes sure the computer is listening on the PORT.
 ### Wireframe
-![Image shows an early sketch of how the API would function](Figure_1.png)
+![Image shows an early sketch of how the API would function](/READMEfiles/Figure_1.png)
 - Above is the wireframe I made to map out the functionality of my API.
 
-![Image shows the web of connected documents created by the API](Figure_2.jpg)
+![Image shows the web of connected documents created by the API](/READMEfiles/Figure_2.jpg)
 
 - [Here](https://trello.com/b/ycKT7465/library-api) is the link to the Trello I made for the API.
 
 
 ## 
 
-![](books.jpeg)
+![](/READMEfiles/books.jpeg)
 # How to use this application on your local machine
 ## Clone this git repository onto your machine
 - Towards the upper right of this page, you should see a green `<> Code` button; click this and copy the https link to create a clone of all my project's folders and files into a git repository on your github account.

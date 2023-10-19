@@ -130,7 +130,7 @@ exports.checkOutBook = async (req, res) => {
             let timeStamp = new Date().getTime()
             let date = new Date(timeStamp)
             let dueDate = date.toLocaleDateString('en-US')
-            user.books.push(book)
+            user.books.push(book) //can allow for duplicate pushes. 
             user.save()
             await checkout.deleteOne()
             const checkout1 = await Checkout.create({ available: false, due: setDate(dueDate), bookRef: book, borrower: user })
